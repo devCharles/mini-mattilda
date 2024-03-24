@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - postgres
+      - redis
+
+  webapp:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+
+  redis:
+    image: redis:7
+    restart: always
+
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: mattilda
+      POSTGRES_USER: matt
+      POSTGRES_PASSWORD: m4t1lD4P4$$w0rdP0s7gr3S
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
