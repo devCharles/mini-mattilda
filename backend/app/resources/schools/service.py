@@ -3,10 +3,8 @@ from typing import Sequence
 from sqlalchemy import Boolean
 from sqlmodel import Session, func, select
 
-from app.models import (Inscription, Invoice, School, SchoolCreate,
-                        SchoolUpdate, Student)
-from app.resources.errors import (ObjectAlreadyExistsException,
-                                  ObjectNotFoundException)
+from app.models import Inscription, Invoice, School, SchoolCreate, SchoolUpdate, Student
+from app.resources.errors import ObjectAlreadyExistsException, ObjectNotFoundException
 
 
 def create_school(*, session: Session, create_school: SchoolCreate) -> School:

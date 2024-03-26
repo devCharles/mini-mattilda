@@ -1,8 +1,7 @@
 from sqlmodel import Session, func, select
 
 from app.models import Inscription, InscriptionCreate
-from app.resources.errors import (ObjectAlreadyExistsException,
-                                  ObjectNotFoundException)
+from app.resources.errors import ObjectAlreadyExistsException, ObjectNotFoundException
 
 
 def create_new_inscription(
