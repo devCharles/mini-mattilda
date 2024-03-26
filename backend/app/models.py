@@ -26,8 +26,8 @@ class InscriptionStatus(str, enum.Enum):
 
 # School Models
 class SchoolBase(SQLModel):
-    name: str = Field(index=True)
-    sid: str = Field(
+    name: str | None = Field(index=True)
+    sid: str | None = Field(
         unique=True, index=True
     )  # School ID for internal recognition purposes
     address: Optional[str] = Field(default=None)
@@ -40,6 +40,7 @@ class SchoolBase(SQLModel):
 
 
 class SchoolCreate(SchoolBase):
+    name: str | None = Field(nullable=True)
     pass
 
 
@@ -56,6 +57,11 @@ class School(SchoolBase, table=True):
     # Relationships
     inscriptions: list["Inscription"] = Relationship(back_populates="school")
     invoices: list["Invoice"] = Relationship(back_populates="school")
+
+
+class SchoolUpdate(SchoolBase):
+    name: str | None = None
+    sid: str | None = None
 
 
 # Student Models
@@ -104,7 +110,9 @@ class InvoiceCreate(InvoiceBase):
 
 class Invoice(InvoiceBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    status: InvoiceStatus = Field(sa_column=Column(Enum(InvoiceStatus)))
+    status: InvoiceStatus = Field(
+        sa_column=Column(Enum(InvoiceStatus)), default=InvoiceStatus.unpaid
+    )
     created_at: datetime.datetime = Field(default_factory=pendulum.now, nullable=False)
     updated_at: datetime.datetime = Field(default_factory=pendulum.now, nullable=False)
     # Relationships
@@ -124,7 +132,9 @@ class InscriptionCreate(InscriptionBase):
 
 class Inscription(InscriptionBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    status: InscriptionStatus = Field(sa_column=Column(Enum(InscriptionStatus)))
+    status: InscriptionStatus = Field(
+        sa_column=Column(Enum(InscriptionStatus)), default=InscriptionStatus.active
+    )
     created_at: datetime.datetime = Field(default_factory=pendulum.now, nullable=False)
     updated_at: datetime.datetime = Field(default_factory=pendulum.now, nullable=False)
     # Relationships
