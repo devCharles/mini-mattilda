@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := all
 
 dev: 
-	cd app && poetry run uvicorn main:app --reload && cd ..
+	poetry run uvicorn app.main:app --reload 
 
 isort:
 	poetry run isort .

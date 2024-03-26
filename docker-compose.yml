@@ -10,6 +10,8 @@ services:
     depends_on:
       - postgres
       - redis
+    networks:
+      - app-network
     develop:
       watch:
         - action: rebuild
@@ -25,15 +27,19 @@ services:
       watch:
         - action: rebuild
           path: ./frontend
+    networks:
+      - app-network
 
   redis:
-    image: redis:7
+    image: redis:7-alpine
     restart: always
     ports:
       - "6379:6379"
+    networks:
+      - app-network
 
   postgres:
-    image: postgres:16
+    image: postgres:16-alpine
     restart: always
     ports:
       - "5432:5432"
@@ -41,6 +47,12 @@ services:
       POSTGRES_PASSWORD: abcde
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

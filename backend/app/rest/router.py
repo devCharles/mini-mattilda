@@ -14,6 +14,6 @@ router.include_router(invoices_router, prefix="/invoices")
 @router.get("/", name="Root", tags=["Root"])
 def root():
     return JSONResponse(
-        content={"message": "Mini Mattilda APIv1"},
+        content={"message": "Mini Mattilda API"},
         status_code=200,
     )
