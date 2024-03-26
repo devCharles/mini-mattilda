@@ -116,6 +116,15 @@ class InvoiceCreate(InvoiceBase):
     pass
 
 
+class InvoiceUpdate(InvoiceBase):
+    amount: float | None = None
+    date: datetime.datetime | None = None
+    due_date: datetime.datetime | None = None
+    description: str | None = None
+    school_id: int | None = None
+    student_id: int | None = None
+
+
 class Invoice(InvoiceBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     status: InvoiceStatus = Field(
@@ -136,6 +145,11 @@ class InscriptionBase(SQLModel):
 
 class InscriptionCreate(InscriptionBase):
     pass
+
+
+class InscriptionUpdate(InscriptionBase):
+    student_id: int | None = None
+    school_id: int | None = None
 
 
 class Inscription(InscriptionBase, table=True):

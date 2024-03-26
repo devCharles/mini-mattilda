@@ -68,7 +68,7 @@ def delete_school(*, session: Session, school_id: int) -> bool:
     return True
 
 
-# TODO: update to allow date range
+# TODO: update to allow date range filtering
 def get_school_statement(*, session: Session, school_id: int) -> dict:
     # Get school
     school = get_school_by_id(session=session, school_id=school_id)
