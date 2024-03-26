@@ -81,6 +81,14 @@ class StudentCreate(StudentBase):
     pass
 
 
+class StudentUpdate(StudentBase):
+    first_name: str | None = None
+    last_name: str | None = None
+    email: str | None = None
+    phone: str | None = None
+    sid: str | None = None
+
+
 class Student(StudentBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     created_at: datetime.datetime = Field(default_factory=pendulum.now, nullable=False)

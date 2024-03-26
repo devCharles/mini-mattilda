@@ -1,13 +1,13 @@
 from sqlmodel import Session, select, func
-from app.models import Student
+from app.models import Student, StudentCreate, StudentUpdate
 from app.resources.errors import ObjectAlreadyExistsException, ObjectNotFoundException
 
 
-def crete_student(*, session: Session, student: Student) -> Student:
+def create_student(*, session: Session, student: StudentCreate):
+    student_validated = Student.model_validate(student)
+
     # Check if student already exists
-    query_existing = select(Student).where(
-        (Student.name == student.name) & (Student.email == student.email)
-    )
+    query_existing = select(Student).where(Student.sid == student.sid)
     existing_student = session.exec(query_existing).first()
     if existing_student:
         raise ObjectAlreadyExistsException(
@@ -15,10 +15,10 @@ def crete_student(*, session: Session, student: Student) -> Student:
         )
 
     # Create new student
-    session.add(student)
+    session.add(student_validated)
     session.commit()
-    session.refresh(student)
-    return student
+    session.refresh(student_validated)
+    return student_validated
 
 
 def get_students(*, session: Session, skip: int = 0, limit: int = 100):
@@ -38,7 +38,7 @@ def get_student_by_id(*, session: Session, student_id: int) -> Student:
 
 
 def update_student(
-    *, session: Session, student_in: Student, student_id: int
+    *, session: Session, student_in: StudentUpdate, student_id: int
 ) -> Student:
     query = select(Student).where(Student.id == student_id)
     student = session.exec(query).first()
@@ -64,22 +64,19 @@ def delete_student(*, session: Session, student_id: int) -> bool:
     return True
 
 
+# TODO: make sure this returns inv
 def get_student_statement(*, session: Session, student_id: int):
     query = select(Student).where(Student.id == student_id)
     student = session.exec(query).first()
     if not student:
         raise ObjectNotFoundException(f"Student not found: {student_id}")
 
-    # Student's invoices unpaid
-    unpaid_invoices = filter(
-        lambda invoice: invoice.status == "unpaid", student.invoices
-    )
+    invoices = []
 
-    # Student's invoices paid
-    paid_invoices = filter(lambda invoice: invoice.status == "paid", student.invoices)
+    for inovice in student.invoices:
+        invoices.append(inovice)
 
     return {
         "student": student,
-        "unpaid_invoices": unpaid_invoices,
-        "paid_invoices": paid_invoices,
+        "invoices": invoices,
     }
