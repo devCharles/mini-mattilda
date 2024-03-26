@@ -1,6 +1,8 @@
-from sqlmodel import Session, select, func
+from sqlmodel import Session, func, select
+
 from app.models import Student, StudentCreate, StudentUpdate
-from app.resources.errors import ObjectAlreadyExistsException, ObjectNotFoundException
+from app.resources.errors import (ObjectAlreadyExistsException,
+                                  ObjectNotFoundException)
 
 
 def create_student(*, session: Session, student: StudentCreate):

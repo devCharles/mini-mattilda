@@ -1,8 +1,9 @@
 import pickle
+
 from fastapi import APIRouter
-from app.resources.invoices import service
 
 from app.models import InvoiceUpdate
+from app.resources.invoices import service
 from app.rest.deps import CacheDep, SessionDep
 
 router = APIRouter(tags=["Invoices"])

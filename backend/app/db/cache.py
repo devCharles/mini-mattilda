@@ -1,4 +1,5 @@
 import os
+
 from redis import Redis
 
 redis_host = os.getenv("REDIS_HOST", "redis")

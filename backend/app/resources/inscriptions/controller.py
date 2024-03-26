@@ -1,9 +1,10 @@
 import pickle
+
 from fastapi import APIRouter
 
-from app.models import InscriptionCreate, InscriptionUpdate, InscriptionCreate
-from app.rest.deps import CacheDep, SessionDep
+from app.models import InscriptionCreate, InscriptionUpdate
 from app.resources.inscriptions import service
+from app.rest.deps import CacheDep, SessionDep
 
 router = APIRouter(tags=["Inscriptions"])
 

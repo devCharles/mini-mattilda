@@ -1,8 +1,10 @@
 import pickle
+
 from fastapi import APIRouter
+
+from app.models import SchoolCreate, SchoolUpdate
 from app.resources.schools import service
 from app.rest.deps import CacheDep, SessionDep
-from app.models import SchoolCreate, SchoolUpdate
 
 router = APIRouter(tags=["Schools"])
 

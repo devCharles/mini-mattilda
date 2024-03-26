@@ -1,9 +1,11 @@
 import pickle
+
 from fastapi import APIRouter
 from sqlalchemy import delete
+
+from app.models import StudentCreate, StudentUpdate
 from app.resources.students import service
 from app.rest.deps import CacheDep, SessionDep
-from app.models import StudentCreate, StudentUpdate
 
 router = APIRouter(tags=["Students"])
 

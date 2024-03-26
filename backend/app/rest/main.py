@@ -1,10 +1,12 @@
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
-from app.rest.router import router as rest_router
-from app.db.db import create_db_and_tables
-from app.resources.errors import ObjectAlreadyExistsException, ObjectNotFoundException
+
 from app.db.cache import redis_connect
+from app.db.db import create_db_and_tables
+from app.resources.errors import (ObjectAlreadyExistsException,
+                                  ObjectNotFoundException)
+from app.rest.router import router as rest_router
 
 app = FastAPI(title="Mini Mattilda", version="1.0")
 

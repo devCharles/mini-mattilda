@@ -1,9 +1,10 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from app.resources.schools.controller import router as schools_router
-from app.resources.invoices.controller import router as invoices_router
-from app.resources.students.controller import router as students_router
+
 from app.resources.inscriptions.controller import router as inscriptions_router
+from app.resources.invoices.controller import router as invoices_router
+from app.resources.schools.controller import router as schools_router
+from app.resources.students.controller import router as students_router
 
 router = APIRouter()
 

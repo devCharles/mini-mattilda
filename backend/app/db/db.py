@@ -1,5 +1,7 @@
 import os
-from sqlmodel import SQLModel, create_engine, Session
+
+from sqlmodel import Session, SQLModel, create_engine
+
 import app.models  # imported to load the models
 
 db_user = os.getenv("POSTGRES_USER", "postgres")

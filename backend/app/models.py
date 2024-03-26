@@ -4,10 +4,11 @@ This is a single file to keep everything simple and to not have to worry about c
 With more time and a bigger project, I would have split this into multiple files
 """
 
-import enum
 import datetime
-import pendulum
+import enum
 from typing import Optional
+
+import pendulum
 from sqlalchemy import Column, Enum
 from sqlmodel import Field, Relationship, SQLModel
 

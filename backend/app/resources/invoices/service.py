@@ -1,4 +1,5 @@
-from sqlmodel import Session, select, func
+from sqlmodel import Session, func, select
+
 from app.models import Invoice, InvoiceCreate
 from app.resources.errors import ObjectNotFoundException
 
