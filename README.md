@@ -108,6 +108,13 @@ docker compose watch
 
 Esto levantará los servicios necesarios (PostgreSQL, Redis, Guvicorn para FastAPI y Next)
 
+Una vez desplegado, se podra acceder atravez de localhost a cada componente del proyecto
+
+- `localhost:8000`: API
+- `localhost:8000/docs`: API docs
+- `localhost:8000/redoc`: API docs alternativos
+- `localhost:3000`: Next front-end
+
 ## Cómo correr las pruebas del API?
 
 La forma mas fácil de correr los test es usando docker también.

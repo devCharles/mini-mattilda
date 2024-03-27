@@ -11,9 +11,7 @@ def create_student(*, session: Session, student: StudentCreate):
     query_existing = select(Student).where(Student.sid == student.sid)
     existing_student = session.exec(query_existing).first()
     if existing_student:
-        raise ObjectAlreadyExistsException(
-            f"Student already exists: {student.name}, {student.email}"
-        )
+        raise ObjectAlreadyExistsException(f"Student already exists: {student.sid}")
 
     # Create new student
     session.add(student_validated)
@@ -65,7 +63,7 @@ def delete_student(*, session: Session, student_id: int) -> bool:
     return True
 
 
-# TODO: make sure this returns inv
+# TODO: make sure this returns invoices
 def get_student_statement(*, session: Session, student_id: int):
     query = select(Student).where(Student.id == student_id)
     student = session.exec(query).first()
