@@ -8,6 +8,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:80"
+    environment:
+      - REDIS_HOST=redis
     depends_on:
       - postgres
       - redis

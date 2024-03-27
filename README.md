@@ -119,10 +119,32 @@ Una vez desplegado, se podra acceder atravez de localhost a cada componente del 
 
 La forma mas fácil de correr los test es usando docker también.
 
-Se puede usar el siguiente comando para correr las pruebas dentro del contenedor
+Se puede usar el siguiente comando para correr las pruebas dentro del contenedor (el contenedor debe encontrase activo para poder ejecutar las pruebas en el)
 
 ```bash
 docker exec mini_mattilda_api pytest
+```
+
+También se puede correr fuera del docker si se desea, pero es necesario tener el docker corriendo o un servidor de redis local en el puerto 6379
+
+para correrlo fuera del docker se necesita posicionarse en la carpeta `backend` y seguir estos pasos
+
+1. Instalar las dependencias con poetry
+
+```bash
+poetry install
+```
+
+2. Activar el environment
+
+```bash
+poetry shell
+```
+
+3. Correr los test usando pytest
+
+```bash
+pytest
 ```
 
 ## Que casos de uso implementa?

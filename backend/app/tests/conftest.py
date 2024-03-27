@@ -1,3 +1,4 @@
+import os
 import pytest
 
 from redis import Redis
@@ -34,7 +35,8 @@ def session_fixture():
 @pytest.fixture(name="cache")
 def cache_fixture():
     """provides a redis cache for testing"""
-    cache = Redis(host="localhost", port=6379, db=3)
+    redis_host = os.getenv("REDIS_HOST", "localhost")
+    cache = Redis(host=redis_host, port=6379, db=3)
     yield cache
     cache.flushdb()
     cache.close()
