@@ -73,7 +73,7 @@ def delete_student(session: SessionDep, cache: CacheDep, student_id: int):
     return {"message": f"Student {student_id} deleted"}
 
 
-@router.get("/{student_id}/statement")
+@router.get("/{student_id}/account-statement")
 def get_student_statement(session: SessionDep, cache: CacheDep, student_id: int):
     cache_key = f"get_student_statement:{student_id}"
     cached_response = cache.get(cache_key)

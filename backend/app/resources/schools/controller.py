@@ -74,7 +74,7 @@ def delete_school(session: SessionDep, cache: CacheDep, school_id: int):
     return {"message": f"School deleted {school_id}"}
 
 
-@router.get("/{school_id}/statement")
+@router.get("/{school_id}/account-statement")
 def get_schools_statement_report(session: SessionDep, cache: CacheDep, school_id: int):
     cache_key = f"get_school_statement:{school_id}"
     cached_response = cache.get(cache_key)

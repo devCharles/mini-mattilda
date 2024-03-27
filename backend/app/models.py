@@ -103,7 +103,7 @@ class Student(StudentBase, table=True):
 
 
 class InvoiceBase(SQLModel):
-    amount: float
+    amount: int
     date: datetime.datetime = Field(default_factory=pendulum.now)
     due_date: datetime.datetime = Field(
         default_factory=lambda: pendulum.now().add(days=30)
