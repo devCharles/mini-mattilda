@@ -1,11 +1,21 @@
 from sqlmodel import Session, func, select
 
-from app.models import Invoice, InvoiceCreate
+from app.models import Invoice, InvoiceCreate, InvoiceUpdate, School, Student
 from app.resources.errors import ObjectNotFoundException
 
 
 def create_invoice(*, session: Session, create_invoice: InvoiceCreate) -> Invoice:
     invoice_validated = Invoice.model_validate(create_invoice)
+
+    student_query = select(Student).where(Student.id == invoice_validated.student_id)
+    student = session.exec(student_query).first()
+    if not student:
+        raise ObjectNotFoundException("Student not found")
+
+    school_query = select(School).where(School.id == invoice_validated.school_id)
+    school = session.exec(school_query).first()
+    if not school:
+        raise ObjectNotFoundException("School not found")
 
     session.add(invoice_validated)
     session.commit()
@@ -56,14 +66,27 @@ def get_invoice_by_student_id(
     return invoice
 
 
-def update_invoice(*, session: Session, invoice_in: InvoiceCreate) -> Invoice | None:
-    query = select(Invoice).where(Invoice.id == invoice_in.id)
+def update_invoice(
+    *, session: Session, invoice_in: InvoiceUpdate, invoice_id: int
+) -> Invoice | None:
+    query = select(Invoice).where(Invoice.id == invoice_id)
     invoice = session.exec(query).first()
     if not invoice:
         raise ObjectNotFoundException("Invoice not found")
-    invoice_in_validated = Invoice.model_validate(invoice_in)
-    invoice(update=invoice_in_validated)
+
+    invoice_update = invoice_in.model_dump(exclude_unset=True)
+    invoice.sqlmodel_update(invoice_update)
     session.add(invoice)
     session.commit()
     session.refresh(invoice)
     return invoice
+
+
+def delete_invoice(*, session: Session, invoice_id: int) -> bool:
+    query = select(Invoice).where(Invoice.id == invoice_id)
+    invoice = session.exec(query).first()
+    if not invoice:
+        raise ObjectNotFoundException("Invoice not found")
+    session.delete(invoice)
+    session.commit()
+    return True

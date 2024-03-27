@@ -97,7 +97,9 @@ def update_invoice(
     session: SessionDep, cache: CacheDep, invoice_id: int, invoice: InvoiceUpdate
 ):
     cache_key = f"get_invoice:{invoice_id}"
-    updated_invoice = service.update_invoice(session=session, invoice_in=invoice)
+    updated_invoice = service.update_invoice(
+        session=session, invoice_in=invoice, invoice_id=invoice_id
+    )
     cache.delete(cache_key)
 
     return {

@@ -118,7 +118,7 @@ class InvoiceCreate(InvoiceBase):
 
 
 class InvoiceUpdate(InvoiceBase):
-    amount: float | None = None
+    amount: int | None = None
     date: datetime.datetime | None = None
     due_date: datetime.datetime | None = None
     description: str | None = None
