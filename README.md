@@ -176,6 +176,8 @@ GET     /{student_id}/account-statement # Estado de cuenta del estudiante
 ```
 GET     /invoices
 GET     /invoices/{invoice_id}
+GET     /invoices/student/{student_id}
+GET     /invoices/school/{school_id}
 POST    /invoices
 PUT     /invoices/{invoice_id}
 DELETE  /invoices/{invoice_id}
