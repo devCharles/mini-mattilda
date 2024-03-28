@@ -140,3 +140,85 @@ def test_invoice_unpaid_by_default(client: TestClient):
     assert create_response.status_code == status.HTTP_200_OK
     response_json = create_response.json()
     assert response_json.get("invoice").get("status") == "unpaid"
+
+
+def test_get_invoices_by_student(client: TestClient):
+    # Student
+    student = StudentCreate(first_name="Test", last_name="Student", sid="TSTSTU00")
+    create_student_response = client.post("/students", json=student.model_dump())
+    assert create_student_response.status_code == status.HTTP_200_OK
+    student_id = create_student_response.json().get("student").get("id")
+
+    # School
+    school = SchoolCreate(sid="TSTSCH00", name="Test School")
+    create_school_response = client.post("/schools", json=school.model_dump())
+    assert create_school_response.status_code == status.HTTP_200_OK
+    school_id = create_school_response.json().get("school").get("id")
+
+    # Create
+    invoice1 = InvoiceCreate(
+        amount=100, student_id=student_id, school_id=school_id, description="Test"
+    )
+    invoice2 = InvoiceCreate(
+        amount=200, student_id=student_id, school_id=school_id, description="Test 2"
+    )
+
+    for invoice in [invoice1, invoice2]:
+        create_response = client.post(
+            "/invoices",
+            json={
+                "amount": invoice.amount,
+                "student_id": invoice.student_id,
+                "school_id": invoice.school_id,
+                "description": invoice.description,
+            },
+        )
+        assert create_response.status_code == status.HTTP_200_OK
+
+    get_response = client.get(f"/invoices/student/{student_id}")
+    assert get_response.status_code == status.HTTP_200_OK
+    response_json = get_response.json()
+    assert response_json.get("invoices") is not None
+    created_invoices = response_json.get("invoices")
+    assert len(created_invoices) >= 2
+
+
+def test_get_invoices_by_school(client: TestClient):
+    # Student
+    student = StudentCreate(first_name="Test", last_name="Student", sid="TSTSTU00")
+    create_student_response = client.post("/students", json=student.model_dump())
+    assert create_student_response.status_code == status.HTTP_200_OK
+    student_id = create_student_response.json().get("student").get("id")
+
+    # School
+    school = SchoolCreate(sid="TSTSCH00", name="Test School")
+    create_school_response = client.post("/schools", json=school.model_dump())
+    assert create_school_response.status_code == status.HTTP_200_OK
+    school_id = create_school_response.json().get("school").get("id")
+
+    # Create
+    invoice1 = InvoiceCreate(
+        amount=100, student_id=student_id, school_id=school_id, description="Test"
+    )
+    invoice2 = InvoiceCreate(
+        amount=200, student_id=student_id, school_id=school_id, description="Test 2"
+    )
+
+    for invoice in [invoice1, invoice2]:
+        create_response = client.post(
+            "/invoices",
+            json={
+                "amount": invoice.amount,
+                "student_id": invoice.student_id,
+                "school_id": invoice.school_id,
+                "description": invoice.description,
+            },
+        )
+        assert create_response.status_code == status.HTTP_200_OK
+
+    get_response = client.get(f"/invoices/school/{school_id}")
+    assert get_response.status_code == status.HTTP_200_OK
+    response_json = get_response.json()
+    assert response_json.get("invoices") is not None
+    created_invoices = response_json.get("invoices")
+    assert len(created_invoices) >= 2

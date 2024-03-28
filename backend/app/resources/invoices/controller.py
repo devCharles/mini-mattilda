@@ -52,10 +52,10 @@ def get_invoice_by_student_id(
     invoice = service.get_invoice_by_student_id(
         session=session, student_id=student_id, skip=skip, limit=limit
     )
-    response = {"invoice": invoice}
+    response = {"invoices": invoice}
 
     cache.set(cache_key, pickle.dumps(response))
-    return {"invoice": invoice}
+    return {"invoices": invoice}
 
 
 @router.get("/school/{school_id}", name="GET invoices by school ID")
@@ -74,10 +74,10 @@ def get_invoice_by_school_id(
     invoice = service.get_invoice_by_school_id(
         session=session, school_id=school_id, skip=skip, limit=limit
     )
-    response = {"invoice": invoice}
+    response = {"invoices": invoice}
 
     cache.set(cache_key, pickle.dumps(response))
-    return {"invoice": invoice}
+    return {"invoices": invoice}
 
 
 @router.post("/", name="Create a new invoice")
