@@ -9,16 +9,16 @@ redis_db = int(os.getenv("REDIS_DB", 0))
 redis_client: Redis | None = None
 
 
-def redis_connect(host=redis_host, port=redis_port, db=redis_db):
+def redis_connect():
     global redis_client
     if redis_client is None:
         print("Connecting Redis")
-        redis_client = Redis(host=host, port=port, db=db)
+        redis_client = Redis(host=redis_host, port=redis_port, db=redis_db)
     return redis_client
 
 
-def get_redis_client(host=redis_host, port=redis_port, db=redis_db):
-    with redis_connect(host=host, port=port, db=db) as client:
+def get_redis_client():
+    with redis_connect() as client:
         yield client
 
 

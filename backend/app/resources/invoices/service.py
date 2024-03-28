@@ -74,6 +74,18 @@ def update_invoice(
     if not invoice:
         raise ObjectNotFoundException("Invoice not found")
 
+    if invoice_in.student_id is not None:
+        student_query = select(Student).where(Student.id == invoice_in.student_id)
+        student = session.exec(student_query).first()
+        if not student:
+            raise ObjectNotFoundException(f"Student not found: {invoice_in.student_id}")
+
+    if invoice_in.school_id is not None:
+        school_query = select(School).where(School.id == invoice_in.school_id)
+        school = session.exec(school_query).first()
+        if not school:
+            raise ObjectNotFoundException(f"School not found: {invoice_in.school_id}")
+
     invoice_update = invoice_in.model_dump(exclude_unset=True)
     invoice.sqlmodel_update(invoice_update)
     session.add(invoice)

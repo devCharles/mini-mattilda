@@ -1,6 +1,12 @@
 from sqlmodel import Session, func, select
 
-from app.models import Inscription, InscriptionCreate
+from app.models import (
+    Inscription,
+    InscriptionCreate,
+    InscriptionUpdate,
+    School,
+    Student,
+)
 from app.resources.errors import ObjectAlreadyExistsException, ObjectNotFoundException
 
 
@@ -13,13 +19,22 @@ def create_new_inscription(
         (Inscription.student_id == inscription.student_id)
         & (Inscription.school_id == inscription.school_id)
     )
-
     existing_inscription = session.exec(existing_inscription_query).first()
 
     if existing_inscription:
         raise ObjectAlreadyExistsException(
             f"Inscription already exists: {inscription.student_id}, {inscription.school_id}"
         )
+
+    student_query = select(Student).where(Student.id == inscription.student_id)
+    student = session.exec(student_query).first()
+    if not student:
+        raise ObjectNotFoundException(f"Student not found: {inscription.student_id}")
+
+    school_query = select(School).where(School.id == inscription.school_id)
+    school = session.exec(school_query).first()
+    if not school:
+        raise ObjectNotFoundException(f"School not found: {inscription.school_id}")
 
     session.add(inscription)
     session.commit()
@@ -92,7 +107,7 @@ def get_inscriptions_by_school_id(
 
 
 def update_inscription(
-    *, session: Session, inscription_in: InscriptionCreate, inscription_id: int
+    *, session: Session, inscription_in: InscriptionUpdate, inscription_id: int
 ) -> Inscription:
     query = select(Inscription).where(Inscription.id == inscription_id)
     inscription = session.exec(query).first()
@@ -100,9 +115,24 @@ def update_inscription(
     if not inscription:
         raise ObjectNotFoundException(f"Inscription not found: {inscription_id}")
 
+    if inscription_in.student_id is not None:
+        student_query = select(Student).where(Student.id == inscription_in.student_id)
+        student = session.exec(student_query).first()
+        if not student:
+            raise ObjectNotFoundException(
+                f"Student not found: {inscription_in.student_id}"
+            )
+
+    if inscription_in.school_id is not None:
+        school_query = select(School).where(School.id == inscription_in.school_id)
+        school = session.exec(school_query).first()
+        if not school:
+            raise ObjectNotFoundException(
+                f"School not found: {inscription_in.school_id}"
+            )
+
     inscription_update = inscription_in.model_dump(exclude_unset=True)
     inscription.sqlmodel_update(inscription_update)
-
     session.add(inscription)
     session.commit()
     session.refresh(inscription)

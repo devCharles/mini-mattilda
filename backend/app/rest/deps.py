@@ -1,7 +1,7 @@
 from typing import Annotated
 
-from fastapi import Depends
 from redis import Redis
+from fastapi import Depends
 from sqlmodel import Session
 
 from app.db.cache import get_redis_client

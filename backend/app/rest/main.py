@@ -1,14 +1,12 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
-from starlette.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Request, status
 
-from app.db.cache import redis_connect, redis_disconnect
 from app.db.db import create_db_and_tables
-from app.resources.errors import ObjectAlreadyExistsException, ObjectNotFoundException
 from app.rest.router import router as rest_router
-
-app = FastAPI(title="Mini Mattilda", version="1.0")
+from starlette.middleware.cors import CORSMiddleware
+from app.db.cache import redis_connect, redis_disconnect
+from app.resources.errors import ObjectAlreadyExistsException, ObjectNotFoundException
 
 
 @asynccontextmanager
@@ -17,6 +15,9 @@ async def lifespan(app: FastAPI):
     redis_connect()
     yield
     redis_disconnect()
+
+
+app = FastAPI(title="Mini Mattilda", version="1.0", lifespan=lifespan)
 
 
 @app.exception_handler(ObjectAlreadyExistsException)
